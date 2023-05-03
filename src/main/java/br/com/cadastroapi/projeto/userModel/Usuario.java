@@ -1,8 +1,7 @@
 package br.com.cadastroapi.projeto.userModel;
 
-import org.assertj.core.internal.bytebuddy.implementation.bytecode.constant.IntegerConstant;
 
-import jakarta.annotation.Generated;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +34,11 @@ public class Usuario {
         this.senha = senha;
         this.telefone = telefone;
     }
+    public Usuario() {
+        // Construtor padrão
+    }
+    
+
 
     public Integer getId() {
         return id;
