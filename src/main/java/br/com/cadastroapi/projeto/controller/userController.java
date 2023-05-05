@@ -1,6 +1,7 @@
 package br.com.cadastroapi.projeto.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.cadastroapi.projeto.DAO.IUsuario;
+import br.com.cadastroapi.projeto.Repository.IUsuario;
+import br.com.cadastroapi.projeto.service.UseruarioService;
 import br.com.cadastroapi.projeto.userModel.Usuario;
 import java.util.List;
 import java.util.Optional;
@@ -21,36 +23,36 @@ import java.util.Optional;
 @RequestMapping("/usuarios")
 public class userController {
 
-
     @Autowired
-    private IUsuario dao;
 
-    
+    private UseruarioService usuarioService;
+
+    public userController(UseruarioService usuarioService) {
+        this.usuarioService = usuarioService;
+
+    }
+
     @GetMapping
-    public List<Usuario> listaUsuarios() {
-        return (List<Usuario>) dao.findAll();
-        
+    public ResponseEntity<List<Usuario>> listaUsuarios() {
+        // List<Usuario> lista = usuarioService.listarUsuarios();
+        return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
+
     }
-    
+
     @PostMapping
-    public Usuario criaUsuario(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = dao.save(usuario);
-        return novoUsuario;
+    public ResponseEntity<Usuario> criaUsuario(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(201).body(usuarioService.criaUsuario(usuario));
     }
+
     @PutMapping
-    public Usuario atualizaUsuario(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = dao.save(usuario);
-        return novoUsuario;
+    public ResponseEntity<Usuario> editaUsuario(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(200).body(usuarioService.editaUsuario(usuario));
     }
+
     @DeleteMapping("/{id}")
-    public Optional<Usuario> excluirUsuario(@PathVariable Integer id){
-        Optional<Usuario> usuario = dao.findById(id);
-        dao.deleteById(id);
-        return usuario;
-
+    public ResponseEntity<?> excluirUsuario(@PathVariable Integer id) {
+        usuarioService.excluirUsuario(id);
+        return ResponseEntity.status(204).build();
     }
-    
+
 }
-
-
-
